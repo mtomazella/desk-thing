@@ -4,10 +4,6 @@
 
 Display::Display()
 {
-  currentFrame = &frame1;
-  nextFrame = &frame2;
-  clearFrame(currentFrame);
-  clearFrame(nextFrame);
 }
 
 void Display::init()
@@ -25,52 +21,6 @@ void Display::init()
 void Display::update()
 {
   mx.update();
-}
-
-void Display::swapFrames()
-{
-  if (currentFrame == &frame1)
-  {
-    currentFrame = &frame2;
-  }
-  else
-  {
-    currentFrame = &frame1;
-  }
-  clearFrame(currentFrame);
-}
-
-void Display::clearFrame(Frame *frame)
-{
-  for (int i = 0; i < FRAME_HEIGHT; ++i)
-  {
-    (*frame)[i] = 0;
-  }
-}
-
-bool Display::compareFrames(Frame *frameA, Frame *frameB)
-{
-  for (int i = 0; i < FRAME_HEIGHT; ++i)
-  {
-    if ((*frameA)[i] != (*frameB)[i])
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-void Display::drawFrame(Frame *frame)
-{
-  for (int y = 0; y < FRAME_HEIGHT; ++y)
-  {
-    for (int x = 0; x < FRAME_WIDTH; ++x)
-    {
-      bool pixelValue = ((*frame)[y] >> x) & 1;
-      Serial.print(pixelValue ? "■" : "□");
-    }
-    Serial.println();
-  }
 }
 
 void Display::writeCharacter(int x, int y, char character)
