@@ -24,7 +24,7 @@ void Display::init()
 
 void Display::update()
 {
-  for (int i = 0; i < MAX_RENDERERS; ++i)
+  for (int i = MAX_RENDERERS - 1; i >= 0; --i)
   {
     if (renderer[i] != nullptr)
     {
@@ -43,7 +43,7 @@ void Display::attachRenderer(Renderer *renderer, int index)
 
 void Display::writeCharacter(int x, int y, char character)
 {
-  mx.setChar(COL_1 - x, character);
+  mx.setChar(display_x(x), character);
 }
 
 int Display::getCharWidth(char character)

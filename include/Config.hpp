@@ -11,6 +11,8 @@
 #define SPACE_SIZE 1
 #define MAX_RENDERERS 4
 
+#define display_x(x) (COL_1 - x)
+
 #define DEBUG 1
 
 #if DEBUG
