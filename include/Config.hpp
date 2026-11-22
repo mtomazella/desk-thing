@@ -1,5 +1,15 @@
-#define FRAME_WIDTH 32
-#define FRAME_HEIGHT 8
+#define USE_LOCAL_FONT 1
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW
+#define MAX_DEVICES 4
+
+#define CLK_PIN 14    // or SCK
+#define DATA_PIN 13   // or MOSI
+#define CS_PIN 12     // or SS
+#define DELAYTIME 100 // in milliseconds
+
+#define COL_1 MAX_DEVICES * 8 - 1
+#define SPACE_SIZE 1
+#define MAX_RENDERERS 4
 
 #define DEBUG 1
 
@@ -19,16 +29,5 @@
 
 #endif
 
-// Define the number of devices we have in the chain and the hardware interface
-// NOTE: These pin numbers will probably not work with your hardware and may
-// need to be adapted
-#define USE_LOCAL_FONT 1
-#define HARDWARE_TYPE MD_MAX72XX::FC16_HW
-#define MAX_DEVICES 4
-#define COL_1 MAX_DEVICES * 8 - 1
-#define SPACE_SIZE 1
-
-#define CLK_PIN 14    // or SCK
-#define DATA_PIN 13   // or MOSI
-#define CS_PIN 12     // or SS
-#define DELAYTIME 100 // in milliseconds
+#define DEVICE_NAME "Desk Thing"
+#define TIMEZONE_OFFSET -3

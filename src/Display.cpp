@@ -1,9 +1,14 @@
 #include <Arduino.h>
 #include "Display.hpp"
+#include "Renderer.hpp"
 #include "Font.hpp"
 
 Display::Display()
 {
+  for (int i = 0; i < MAX_RENDERERS; ++i)
+  {
+    renderer[i] = nullptr;
+  }
 }
 
 void Display::init()
@@ -12,15 +17,28 @@ void Display::init()
   {
     Serial.println("Failed to initialize MD_MAX72XX");
   }
+  mx.control(MD_MAX72XX::INTENSITY, 0);
   mx.clear();
-  mx.setFont(bit3font);
-  writeAt(0, 0, "Hello");
   return;
 }
 
 void Display::update()
 {
+  for (int i = 0; i < MAX_RENDERERS; ++i)
+  {
+    if (renderer[i] != nullptr)
+    {
+      renderer[i]->render(*this);
+    }
+  }
   mx.update();
+}
+
+void Display::attachRenderer(Renderer *renderer, int index)
+{
+  if (index < 0 || index >= MAX_RENDERERS)
+    return;
+  this->renderer[index] = renderer;
 }
 
 void Display::writeCharacter(int x, int y, char character)

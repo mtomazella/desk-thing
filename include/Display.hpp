@@ -3,7 +3,7 @@
 #include <MD_MAX72xx.h>
 #include "Config.hpp"
 
-typedef unsigned int Frame[FRAME_HEIGHT];
+class Renderer;
 
 class Display
 {
@@ -17,4 +17,8 @@ public:
   bool needsSpace(char character);
   void writeCharacter(int x, int y, char character);
   void writeAt(int x, int y, String text);
+  void attachRenderer(Renderer *renderer, int index);
+
+private:
+  Renderer *renderer[MAX_RENDERERS];
 };
