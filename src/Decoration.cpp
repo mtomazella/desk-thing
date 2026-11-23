@@ -14,8 +14,6 @@ void Decoration::render(Display &display)
     }
   }
 
-  Serial.println(characterList[selectedCharacter]);
-
   display.mx.setFont(decorationFont);
   display.writeCharacter(xOffset, yOffset, (char)characterList[selectedCharacter]);
 }

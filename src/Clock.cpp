@@ -4,8 +4,12 @@
 
 void Clock::render(Display &display)
 {
+  if (handleAlarms(display))
+  {
+    return;
+  }
   display.mx.setFont(clockFont);
-  display.writeAt(0, 0, getTimeString());
+  display.writeAt(xOffset, 0, getTimeString());
 }
 
 String Clock::getTimeString()
@@ -33,4 +37,74 @@ String Clock::getTimeString()
   snprintf(buffer, sizeof(buffer), "%02d%02d", hours, minutes);
 
   return String(buffer);
+}
+
+void Clock::addAlarm(int alarmTime)
+{
+  for (int i = 0; i < MAX_ALARMS; i++)
+  {
+    if (alarms[i] == -1)
+    {
+      alarms[i] = alarmTime;
+      break;
+    }
+  }
+}
+
+void Clock::stopAlarm()
+{
+  lastAlarmStop = unixtime;
+  noTone(BUZZER);
+}
+
+bool Clock::handleAlarms(Display &display)
+{
+  int time = getTimeString().toInt();
+  bool isAlarmActive = false;
+
+  for (int i = 0; i < MAX_ALARMS; i++)
+  {
+    if (alarms[i] != -1 && alarms[i] <= time) // has alarm and is now or already started
+    {
+      if (lastAlarmStop < alarms[i])
+      { // and has not been stopped
+        if (time - alarms[i] < 5)
+        { // and has not been beeping for more than 5 minutes
+          isAlarmActive = true;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!isAlarmActive)
+  {
+    return false;
+  }
+
+  long now = millis();
+  long delta = now - lastBeep;
+
+  if (delta < ALARM_BEEP_DURATION)
+  { // 0-500ms - beep
+    for (int y = 0; y < MAX_DEVICES * 8; y++)
+    {
+      for (int x = 0; x < 8; x++)
+      {
+        display.mx.setPoint(x, y, true);
+      }
+    }
+    tone(BUZZER, ALARM_BEEP_FREQUENCY);
+  }
+  else if (delta < (ALARM_BEEP_SILENCE_DURATION + ALARM_BEEP_DURATION))
+  { // 500-1000ms - silence
+    display.mx.clear();
+    noTone(BUZZER);
+  }
+  else
+  { // restart
+    lastBeep = now;
+  }
+
+  return true;
 }

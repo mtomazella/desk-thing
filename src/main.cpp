@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Ticker.h>
 #include "Display.hpp"
 #include "Clock.hpp"
 #include "Config.hpp"
@@ -6,14 +7,14 @@
 #include "HttpClient.hpp"
 #include "Decoration.hpp"
 #include "Ball.hpp"
-#include <Ticker.h>
 
 HttpClient httpClient(DEVICE_NAME, WIFI_SSID, WIFI_PASSWORD);
 Display display;
-Clock clockRenderer(0, 0);
+Clock clockRenderer(8, 0);
 Ticker clockTicker;
+Ticker intensityTicker;
 Ball ballRenderer(16, 0, 16, 8, 200);
-Decoration decorationRenderer1(16, 0, (int[]){0}, 1, 0);
+Decoration decorationRenderer1(0, 0, (int[]){0}, 1, 0);
 Decoration decorationRenderer2(24, 0, (int[]){1}, 1, 0);
 
 void updateClock()
@@ -23,6 +24,16 @@ void updateClock()
   {
     clockRenderer.setTime(currentTime);
   }
+}
+
+void manageIntensity()
+{
+  int time = clockRenderer.getTimeString().toInt();
+  if (time >= 600 && time < 2000)
+  {
+    display.mx.control(MD_MAX72XX::INTENSITY, 15);
+  }
+  display.mx.control(MD_MAX72XX::INTENSITY, 0);
 }
 
 void setup()
@@ -38,7 +49,9 @@ void setup()
   display.init();
 
   clockTicker.attach(60 * 60, updateClock);
+  intensityTicker.attach(60, manageIntensity);
   updateClock();
+  // clockRenderer.addAlarm(2202);
 }
 
 void loop()

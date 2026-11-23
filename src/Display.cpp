@@ -31,7 +31,7 @@ void Display::update()
       renderer[i]->render(*this);
     }
   }
-  mx.update();
+  // mx.update();
 }
 
 void Display::attachRenderer(Renderer *renderer, int index)
