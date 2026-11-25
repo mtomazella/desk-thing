@@ -9,7 +9,7 @@ void Clock::render(Display &display)
     return;
   }
   display.mx.setFont(clockFont);
-  display.writeAt(xOffset, 0, getTimeString());
+  display.writeAt(xOffset, 0, getDisplayTimeString());
 }
 
 String Clock::getTimeString()
@@ -37,6 +37,13 @@ String Clock::getTimeString()
   snprintf(buffer, sizeof(buffer), "%02d%02d", hours, minutes);
 
   return String(buffer);
+}
+
+String Clock::getDisplayTimeString()
+{
+  String time = getTimeString();
+  time = time.substring(0, 2) + "/" + time.substring(2, 4);
+  return time;
 }
 
 void Clock::addAlarm(int alarmTime)

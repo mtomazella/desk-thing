@@ -54,8 +54,8 @@ void setup()
 
   display.attachRenderer(&clockRenderer, 0);
   // display.attachRenderer(&ballRenderer, 1);
-  display.attachRenderer(&decorationRenderer1, 1);
-  display.attachRenderer(&decorationRenderer2, 2);
+  // display.attachRenderer(&decorationRenderer1, 1);
+  // display.attachRenderer(&decorationRenderer2, 2);
   display.init();
   inputManager.init();
 

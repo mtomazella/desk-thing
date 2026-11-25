@@ -40,7 +40,7 @@
 #define TIME_DISPLAY_ENABLE_ON_INPUT 30000 //ms
 
 // DEBUG
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
 #define PRINT(s, x)     \

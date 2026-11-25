@@ -9,6 +9,7 @@ public:
   Clock(int xOffset, int yOffset) : Renderer(xOffset, yOffset) {}
   void render(Display &display) override;
   String getTimeString();
+  String getDisplayTimeString();
   void setTime(long newTime) { unixtime = newTime; }
   void addAlarm(int alarmTime);
   void stopAlarm();
