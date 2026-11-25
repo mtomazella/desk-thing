@@ -36,11 +36,12 @@ void manageDisplay()
   int time = clockRenderer.getTimeString().toInt();
   PRINTS("Current time: ");
   PRINTD(time);
-  if (time >= 600 && time < 2000)
-  {
-    display.setIntensity(7);
-  }
-  display.setIntensity(0);
+
+  display.setIntensity(
+      (time >= TIME_HIGH_INTENSITY_START && time < TIME_HIGH_INTENSITY_END)
+          ? DISPLAY_HIGH_INTENSITY
+          : DISPLAY_LOW_INTENSITY);
+  display.setEnabled((time >= TIME_DISPLAY_ENABLED_START && time < TIME_DISPLAY_ENABLED_END));
 }
 
 void setup()
@@ -60,9 +61,8 @@ void setup()
 
   clockTicker.attach(60 * 15, updateClock);
   displayTicker.attach(15, manageDisplay);
-  restartTicker.attach(60 * 15, []() {
-    ESP.restart();
-  });
+  restartTicker.attach(60 * 15, []()
+                       { ESP.restart(); });
   manageDisplay();
   updateClock();
 }
@@ -71,5 +71,11 @@ void loop()
 {
   httpClient.maintainConnection();
   stateManager.listen();
+
+  if (clockRenderer.isAlarmActive() || millis() - stateManager.getLastEventTime() < TIME_DISPLAY_ENABLE_ON_INPUT)
+  {
+    display.setEnabled(true);
+  }
+
   display.update();
 }

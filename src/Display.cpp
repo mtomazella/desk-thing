@@ -24,6 +24,11 @@ void Display::init()
 
 void Display::update()
 {
+  if (!enabled)
+  {
+    mx.clear();
+    return;
+  }
   mx.control(MD_MAX72XX::INTENSITY, intensity);
   for (int i = MAX_RENDERERS - 1; i >= 0; --i)
   {

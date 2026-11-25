@@ -19,6 +19,9 @@ void StateManager::listen()
   InputEvent event = inputManager.read();
   PRINTS("Event: ");
   PRINTD(static_cast<int>(event));
+
+  lastEventTime = millis();
+
   if (isButtonEvent(event) && clock.isAlarmActive())
   {
     clock.stopAlarm();

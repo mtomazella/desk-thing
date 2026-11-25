@@ -19,8 +19,10 @@ public:
   void writeAt(int x, int y, String text);
   void attachRenderer(Renderer *renderer, int index);
   void setIntensity(int intensity) { this->intensity = intensity; }
+  void setEnabled(bool enabled) { this->enabled = enabled; }
 
 private:
   Renderer *renderer[MAX_RENDERERS];
   int intensity = 0;
+  bool enabled = true;
 };
