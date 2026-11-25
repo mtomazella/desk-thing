@@ -30,14 +30,19 @@ void Display::update()
     return;
   }
   mx.control(MD_MAX72XX::INTENSITY, intensity);
-  for (int i = MAX_RENDERERS - 1; i >= 0; --i)
+  bool hasPrioritary = false;
+  for (int i = 0; i < MAX_RENDERERS; i++)
   {
-    if (renderer[i] != nullptr)
-    {
-      renderer[i]->render(*this);
-      if (renderer[i]->isPriority())
-        break;
-    }
+    if (renderer[i] == nullptr || !renderer[i]->isPriority())
+      continue;
+    hasPrioritary = true;
+    break;
+  }
+  for (int i = MAX_RENDERERS - 1; i >= 0; i--)
+  {
+    if (renderer[i] == nullptr || (hasPrioritary && !renderer[i]->isPriority()))
+      continue;
+    renderer[i]->render(*this);
   }
   // mx.update();
 }
