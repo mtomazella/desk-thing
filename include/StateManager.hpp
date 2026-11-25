@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Arduino.h>
 #include "Input.hpp"
 
 class Display;
@@ -16,7 +17,7 @@ private:
   InputManager &inputManager;
   Display &display;
   Clock &clock;
-  long lastEventTime = 0;
+  long lastEventTime;
 
   static bool isButtonEvent(InputEvent event);
 };

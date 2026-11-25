@@ -63,8 +63,8 @@ void setup()
   displayTicker.attach(15, manageDisplay);
   restartTicker.attach(60 * 15, []()
                        { ESP.restart(); });
-  manageDisplay();
   updateClock();
+  manageDisplay();
 }
 
 void loop()
