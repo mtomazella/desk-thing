@@ -20,6 +20,7 @@ public:
                     width(width),
                     height(height) {}
   virtual void render(Display &display);
+  virtual bool isPriority() { return false; }
 
 protected:
   int xOffset = 0;

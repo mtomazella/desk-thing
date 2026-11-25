@@ -7,15 +7,20 @@
 #include "HttpClient.hpp"
 #include "Decoration.hpp"
 #include "Ball.hpp"
+#include "Input.hpp"
+#include "StateManager.hpp"
 
 HttpClient httpClient(DEVICE_NAME, WIFI_SSID, WIFI_PASSWORD);
 Display display;
 Clock clockRenderer(8, 0);
 Ticker clockTicker;
-Ticker intensityTicker;
+Ticker displayTicker;
+Ticker restartTicker;
 Ball ballRenderer(16, 0, 16, 8, 200);
 Decoration decorationRenderer1(0, 0, (int[]){0}, 1, 0);
 Decoration decorationRenderer2(24, 0, (int[]){1}, 1, 0);
+InputManager inputManager;
+StateManager stateManager(inputManager, display, clockRenderer);
 
 void updateClock()
 {
@@ -26,19 +31,23 @@ void updateClock()
   }
 }
 
-void manageIntensity()
+void manageDisplay()
 {
   int time = clockRenderer.getTimeString().toInt();
+  PRINTS("Current time: ");
+  PRINTD(time);
   if (time >= 600 && time < 2000)
   {
-    display.mx.control(MD_MAX72XX::INTENSITY, 15);
+    display.setIntensity(7);
   }
-  display.mx.control(MD_MAX72XX::INTENSITY, 0);
+  display.setIntensity(0);
 }
 
 void setup()
 {
+#if DEBUG
   Serial.begin(115200);
+#endif
 
   httpClient.init();
 
@@ -47,15 +56,20 @@ void setup()
   display.attachRenderer(&decorationRenderer1, 1);
   display.attachRenderer(&decorationRenderer2, 2);
   display.init();
+  inputManager.init();
 
-  clockTicker.attach(60 * 60, updateClock);
-  intensityTicker.attach(60, manageIntensity);
+  clockTicker.attach(60 * 15, updateClock);
+  displayTicker.attach(15, manageDisplay);
+  restartTicker.attach(60 * 15, []() {
+    ESP.restart();
+  });
+  manageDisplay();
   updateClock();
-  // clockRenderer.addAlarm(2202);
 }
 
 void loop()
 {
   httpClient.maintainConnection();
+  stateManager.listen();
   display.update();
 }

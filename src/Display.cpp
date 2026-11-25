@@ -2,6 +2,7 @@
 #include "Display.hpp"
 #include "Renderer.hpp"
 #include "Font.hpp"
+#include "Config.hpp"
 
 Display::Display()
 {
@@ -15,20 +16,22 @@ void Display::init()
 {
   if (!mx.begin())
   {
-    Serial.println("Failed to initialize MD_MAX72XX");
+    PRINTS("Failed to initialize MD_MAX72XX");
   }
-  mx.control(MD_MAX72XX::INTENSITY, 0);
-  mx.clear();
+  mx.control(MD_MAX72XX::INTENSITY, intensity);
   return;
 }
 
 void Display::update()
 {
+  mx.control(MD_MAX72XX::INTENSITY, intensity);
   for (int i = MAX_RENDERERS - 1; i >= 0; --i)
   {
     if (renderer[i] != nullptr)
     {
       renderer[i]->render(*this);
+      if (renderer[i]->isPriority())
+        break;
     }
   }
   // mx.update();

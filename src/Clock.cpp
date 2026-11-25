@@ -57,10 +57,9 @@ void Clock::stopAlarm()
   noTone(BUZZER);
 }
 
-bool Clock::handleAlarms(Display &display)
+bool Clock::isAlarmActive()
 {
   int time = getTimeString().toInt();
-  bool isAlarmActive = false;
 
   for (int i = 0; i < MAX_ALARMS; i++)
   {
@@ -70,14 +69,19 @@ bool Clock::handleAlarms(Display &display)
       { // and has not been stopped
         if (time - alarms[i] < 5)
         { // and has not been beeping for more than 5 minutes
-          isAlarmActive = true;
+          return true;
           break;
         }
       }
     }
   }
+  return false;
+}
 
-  if (!isAlarmActive)
+bool Clock::handleAlarms(Display &display)
+{
+
+  if (!isAlarmActive())
   {
     return false;
   }

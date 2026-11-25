@@ -1,4 +1,5 @@
 #include "HttpClient.hpp"
+#include "Config.hpp"
 
 void HttpClient::init()
 {
@@ -6,33 +7,33 @@ void HttpClient::init()
   WiFi.mode(WIFI_STA);
   WiFi.begin(_ssid, _password);
 
-  Serial.print(F("Connecting to WiFi SSID: "));
-  Serial.println(_ssid);
+  PRINTS("Connecting to WiFi SSID: ");
+  PRINTS(_ssid);
 
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(500);
-    Serial.print(F("."));
+    PRINTS(".");
   }
 
-  Serial.println("Connected to WiFi");
+  PRINTS("Connected to WiFi");
 }
 
 void HttpClient::maintainConnection()
 {
   if (WiFi.status() != WL_CONNECTED)
   {
-    Serial.println("WiFi connection lost. Reconnecting...");
+    PRINTS("WiFi connection lost. Reconnecting...");
     WiFi.disconnect();
     WiFi.begin(_ssid, _password);
 
     while (WiFi.status() != WL_CONNECTED)
     {
       delay(500);
-      Serial.print(F("."));
+      PRINTS(".");
     }
 
-    Serial.println("Reconnected to WiFi");
+    PRINTS("Reconnected to WiFi");
   }
 }
 
@@ -43,9 +44,9 @@ int HttpClient::getTime()
 
   if (httpCode < 0 || httpCode != HTTP_CODE_OK)
   {
-    Serial.print(F("HTTP GET request failed, error: "));
-    Serial.print(httpCode);
-    Serial.println(client.errorToString(httpCode));
+    PRINTS(F("HTTP GET request failed, error: "));
+    PRINTS(httpCode);
+    PRINTS(String(client.errorToString(httpCode)).c_str());
     return -1;
   }
 

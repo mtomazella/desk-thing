@@ -13,6 +13,8 @@ public:
   void addAlarm(int alarmTime);
   void stopAlarm();
   bool handleAlarms(Display &display);
+  bool isAlarmActive();
+  bool isPriority() override { return isAlarmActive(); }
 
 private:
   long unixtime = 0;
