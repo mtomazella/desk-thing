@@ -8,7 +8,7 @@ StateManager::StateManager(
     Clock &clock) : inputManager(inputManager),
                     display(display),
                     clock(clock),
-                    lastEventTime(millis() + TIME_DISPLAY_ENABLE_ON_INPUT + 1) {}
+                    lastEventTime(millis() - (TIME_DISPLAY_ENABLE_ON_INPUT + 1)) {}
 
 void StateManager::listen()
 {
